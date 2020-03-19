@@ -180,12 +180,17 @@ namespace Scriban.Parsing
 
 
 
-                TODO: Parse these as special statements rather than directive functions
+                
                 case "layout":
+                    CheckNotInCase(parent, startToken);
+                    statement = ParseLayoutStatement();
+                    break;
+
                 case "body":
                     CheckNotInCase(parent, startToken);
-                    // Otherwise it is an expression statement
-                    statement = ParseExpressionStatement();
+                    statement = ParseBodyStatement();
+                    NextToken();
+                    ExpectEndOfStatement(statement);
                     break;
 
 
@@ -353,6 +358,8 @@ namespace Scriban.Parsing
                 case "ret":
                 case "wrap":
                 case "do":
+                case "layout":
+                case "body":
                     return true;
             }
             return false;

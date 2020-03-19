@@ -2,19 +2,34 @@
 // Licensed under the BSD-Clause 2 license. 
 // See license.txt file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using Scriban.Helpers;
-using Scriban.Runtime;
 using Scriban.Syntax;
+using System;
+using System.Diagnostics;
 
 namespace Scriban.Parsing
 {
     public partial class Parser
     {
+        private ScriptLayoutStatement ParseLayoutStatement()
+        {
+            var layoutStatement = Open<ScriptLayoutStatement>();
+            bool hasAnonymous;
+            var expression = TransformKeyword(ExpectAndParseExpressionAndAnonymous(layoutStatement, out hasAnonymous)) as ScriptFunctionCall;
+            if (expression == null)
+                LogError(layoutStatement, $"Expecting a layout file name.", true);
+            else
+                layoutStatement.Arguments.AddRange(expression.Arguments);
+            return Close(layoutStatement);
+        }
+
+
+        private ScriptBodyStatement ParseBodyStatement()
+        {
+            var bodyStatement = Open<ScriptBodyStatement>();
+            return Close(bodyStatement);
+        }
+
+
         private ScriptBlockStatement ParseBlockStatement(ScriptStatement parentStatement)
         {
             Debug.Assert(!(parentStatement is ScriptBlockStatement));

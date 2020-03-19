@@ -43,9 +43,10 @@ namespace Scriban.Syntax
             var newBody = new ScriptBlockStatement();
             foreach (var node in layoutBody.Statements)
             {
-
-
-                newBody.Statements.Add(node);
+                if (node is ScriptBodyStatement)
+                    newBody.Statements.AddRange(pageBody.Statements);
+                else
+                    newBody.Statements.Add(node);
             }
             return newBody;
         }

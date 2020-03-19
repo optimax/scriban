@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Scriban.Helpers;
 using Scriban.Parsing;
 using Scriban.Runtime;
@@ -237,9 +238,9 @@ namespace Scriban
             {
                 if (Page == null || Page.Body.Statements.Count == 0)
                     return null;
+
                 if (render)
                     ResolvePageLayout(context);
-
 
                 var result = context.Evaluate(Page);
                 if (render)
@@ -261,34 +262,22 @@ namespace Scriban
         }
 
 
-
-        //AJW
-        // TODO FirstStatement Check : This may be unnecessarily restrictive...
+        //AJW: Retrieve a layout statement, if any
         private void ResolvePageLayout(TemplateContext context)
         {
-            var firstStatement = Page.Body.Statements[0] as ScriptExpressionStatement;
-            if (firstStatement == null)
+            var layoutStatement = Page.Body.Statements.FirstOrDefault(source => source is ScriptLayoutStatement) as ScriptLayoutStatement;
+            if (layoutStatement == null)
                 return;
-            var layoutDirective = firstStatement.Expression as ScriptLayoutDirective;
-            if (layoutDirective == null)
-                return;
-
-            var target = layoutDirective.Target as ScriptVariableGlobal;
-            Debug.Assert(target.Name.ToLower() == "layout");
-            // Layout specified!
-
-
-            Page.Body.Statements.RemoveAt(0);
-            Page.Layout = layoutDirective.Evaluate(context) as Template;
+            Page.Body.Statements.Remove(layoutStatement);
+            Page.Layout = layoutStatement.ApplyLayout(context);
         }
-
-         
 
 
         private void CheckErrors()
         {
             if (HasErrors) throw new InvalidOperationException("This template has errors. Check the <Template.HasError> and <Template.Messages> before evaluating a template. Messages:\n" + StringHelper.Join("\n", Messages));
         }
+
 
         private void ParseInternal(string text, string sourceFilePath)
         {
