@@ -343,7 +343,14 @@ namespace Scriban.Parsing
 
                         if (functionCall == null)
                         {
-                            functionCall = Open<ScriptFunctionCall>();
+                            //AJW: Special layout-related directives
+                            var leftOperandVarGlobal = leftOperand as ScriptVariableGlobal;
+                            if (leftOperandVarGlobal?.Name.ToLower() == "layout")
+                                functionCall = Open<ScriptLayoutDirective>();
+                            else if (leftOperandVarGlobal?.Name.ToLower() == "body")
+                                functionCall = Open<ScriptBodyDirective>();
+                            else
+                                functionCall = Open<ScriptFunctionCall>();
                             functionCall.Target = leftOperand;
 
                             // If we need to convert liquid to scriban functions:

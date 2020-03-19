@@ -176,6 +176,19 @@ namespace Scriban.Parsing
                     CheckNotInCase(parent, startToken);
                     statement = ParseCaptureStatement();
                     break;
+
+
+
+
+                TODO: Parse these as special statements rather than directive functions
+                case "layout":
+                case "body":
+                    CheckNotInCase(parent, startToken);
+                    // Otherwise it is an expression statement
+                    statement = ParseExpressionStatement();
+                    break;
+
+
                 default:
                     CheckNotInCase(parent, startToken);
                     // Otherwise it is an expression statement
