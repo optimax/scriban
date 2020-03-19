@@ -25,10 +25,31 @@ namespace Scriban.Syntax
 
         public ScriptBlockStatement Body { get; set; }
 
+        public Template Layout { get; set; } //-AJW
+
         public override object Evaluate(TemplateContext context)
         {
+            if (Layout != null)
+            {
+                var newBody = ReplaceBodyDirective(Layout.Page.Body,Body);
+                return context.Evaluate(newBody);
+            }
             return context.Evaluate(Body);
         }
+
+
+        private ScriptBlockStatement ReplaceBodyDirective(ScriptBlockStatement layoutBody, ScriptBlockStatement pageBody)
+        {
+            var newBody = new ScriptBlockStatement();
+            foreach (var node in layoutBody.Statements)
+            {
+
+
+                newBody.Statements.Add(node);
+            }
+            return newBody;
+        }
+
 
         public override void Write(TemplateRewriterContext context)
         {

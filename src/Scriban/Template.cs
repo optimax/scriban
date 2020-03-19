@@ -3,6 +3,7 @@
 // See license.txt file in the project root for full license information.
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Scriban.Helpers;
 using Scriban.Parsing;
@@ -234,6 +235,12 @@ namespace Scriban
 
             try
             {
+                if (Page == null || Page.Body.Statements.Count == 0)
+                    return null;
+                if (render)
+                    ResolvePageLayout(context);
+
+
                 var result = context.Evaluate(Page);
                 if (render)
                 {
@@ -252,6 +259,31 @@ namespace Scriban
                 }
             }
         }
+
+
+
+        //AJW
+        // TODO FirstStatement Check : This may be unnecessarily restrictive...
+        private void ResolvePageLayout(TemplateContext context)
+        {
+            var firstStatement = Page.Body.Statements[0] as ScriptExpressionStatement;
+            if (firstStatement == null)
+                return;
+            var layoutDirective = firstStatement.Expression as ScriptLayoutDirective;
+            if (layoutDirective == null)
+                return;
+
+            var target = layoutDirective.Target as ScriptVariableGlobal;
+            Debug.Assert(target.Name.ToLower() == "layout");
+            // Layout specified!
+
+
+            Page.Body.Statements.RemoveAt(0);
+            Page.Layout = layoutDirective.Evaluate(context) as Template;
+        }
+
+         
+
 
         private void CheckErrors()
         {
