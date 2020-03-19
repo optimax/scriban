@@ -263,7 +263,7 @@ namespace Scriban
 
 
         //AJW: Retrieve a layout statement, if any
-        private void ResolvePageLayout(TemplateContext context)
+        public void ResolvePageLayout(TemplateContext context)
         {
             var layoutStatement = Page.Body.Statements.FirstOrDefault(source => source is ScriptLayoutStatement) as ScriptLayoutStatement;
             if (layoutStatement == null)

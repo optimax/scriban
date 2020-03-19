@@ -64,14 +64,14 @@ namespace Scriban.Syntax
                 throw new ScriptRuntimeException(this.Span, $"Include template path is null for `{templateName}");
             }
 
-            // Compute a new parameters for the include
-            var newParameters = new ScriptArray(Arguments.Count - 1);
-            for (int i = 1; i < Arguments.Count; i++)
-            {
-                newParameters[i] = Arguments[i];
-            }
+            //// Compute a new parameters for the include
+            //var newParameters = new ScriptArray(Arguments.Count - 1);
+            //for (int i = 1; i < Arguments.Count; i++)
+            //{
+            //    newParameters[i] = Arguments[i];
+            //}
 
-            context.SetValue(ScriptVariable.Arguments, newParameters, true);
+            //context.SetValue(ScriptVariable.Arguments, newParameters, true);
 
             Template template;
 
@@ -118,7 +118,10 @@ namespace Scriban.Syntax
             try
             {
                 context.EnterRecursive(this);
-                result = template; //.Render(context); //AJW
+                //AJW
+                template.ResolvePageLayout(context);
+                result = template;
+                //`
                 context.ExitRecursive(this);
             }
             finally

@@ -31,11 +31,25 @@ namespace Scriban.Syntax
         {
             if (Layout != null)
             {
-                var newBody = ReplaceBodyDirective(Layout.Page.Body,Body);
+                var newBody = WrapBodyWithLayout(Body, Layout);
                 return context.Evaluate(newBody);
             }
             return context.Evaluate(Body);
         }
+
+
+        /// <summary>
+        /// !!!! The recursive layout application
+        /// </summary>
+        private ScriptBlockStatement WrapBodyWithLayout(ScriptBlockStatement body, Template layout)
+        {
+            if (layout == null)
+                return body;
+            var newBody = ReplaceBodyDirective(layout.Page.Body, body);
+            newBody = WrapBodyWithLayout(newBody, layout.Page.Layout);
+            return newBody;
+        }
+
 
 
         private ScriptBlockStatement ReplaceBodyDirective(ScriptBlockStatement layoutBody, ScriptBlockStatement pageBody)
