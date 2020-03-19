@@ -25,6 +25,8 @@ namespace Scriban.Functions
             public DefaultBuiltins() : base(10, false)
             {
                 SetValue("array", new ArrayFunctions(), true);
+                SetValue("body", new BodyFunction(), true);
+                SetValue("layout", new LayoutFunction(), true);
                 SetValue("empty", EmptyScriptObject.Default, true);
                 SetValue("include", new IncludeFunction(), true);
                 SetValue("exclude", new ExcludeFunction(), true);
