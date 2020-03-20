@@ -2,19 +2,18 @@
 
 namespace Scriban.Syntax
 {
-    [ScriptSyntax("body directive expression", "<target_expression> <argument[0]> ... <argument[n]>")]
+    [ScriptSyntax("'body' directive", "body")]
     public class ScriptBodyStatement : ScriptStatement
     {
 
         public override object Evaluate(TemplateContext context)
         {
-            return "";
+            throw new ScriptRuntimeException(this.Span, $"The 'body' directive can only appear in a template used as a layout");
         }
 
         public override void Write(TemplateRewriterContext context)
         {
         }
-
 
         public override string ToString()
         {

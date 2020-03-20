@@ -2,6 +2,8 @@
 // Licensed under the BSD-Clause 2 license. 
 // See license.txt file in the project root for full license information.
 
+using System.Collections.Generic;
+using System.Diagnostics;
 using Scriban.Parsing;
 
 namespace Scriban.Syntax
@@ -13,6 +15,7 @@ namespace Scriban.Syntax
         /// </summary>
         public ScriptPage()
         {
+            Sections = new Dictionary<string, ScriptSectionStatement>();
         }
 
         /// <summary>
@@ -25,17 +28,52 @@ namespace Scriban.Syntax
 
         public ScriptBlockStatement Body { get; set; }
 
-        public Template Layout { get; set; } //-AJW
+        public Template Layout { get; set; }
+
+        public Dictionary<string, ScriptSectionStatement> Sections { get; set; }
 
         public override object Evaluate(TemplateContext context)
         {
-            if (Layout != null)
+            context.PushPage(this);
+            try
             {
-                var newBody = WrapBodyWithLayout(Body, Layout);
-                return context.Evaluate(newBody);
+                StripLocalSections();
+                if (Layout != null)
+                {
+                    var newBody = WrapBodyWithLayout(Body, Layout);
+                    return context.Evaluate(newBody);
+                }
+
+                return context.Evaluate(Body);
             }
-            return context.Evaluate(Body);
+            finally
+            {
+                var popped = context.PopPage();
+                Debug.Assert(popped == this);
+            }
         }
+
+
+        private void StripLocalSections()
+        {
+            var newStatements = new List<ScriptStatement>();
+            foreach (var statement in Body.Statements)
+            {
+                var section = statement as ScriptSectionStatement;
+                if (section != null)
+                {
+                    var sectionName = section.Name;
+                    Sections.Add(sectionName, section);
+                }
+                else
+                {
+                    newStatements.Add(statement);
+                }
+            }
+            Body.Statements.Clear();
+            Body.Statements.AddRange(newStatements);
+        }
+
 
 
         /// <summary>

@@ -30,9 +30,41 @@ namespace Scriban.Parsing
         }
 
 
+
+        private ScriptSectionStatement ParseSectionStatement()
+        {
+            var sectionStatement = Open<ScriptSectionStatement>();
+            // Arguments
+            var expression = TransformKeyword(ExpectAndParseExpressionAndAnonymous(sectionStatement, out var hasAnonymous)) as ScriptFunctionCall;
+            if (expression == null)
+                LogError(sectionStatement, $"Expecting a layout file name.", true);
+            else
+                sectionStatement.Arguments.AddRange(expression.Arguments);
+            //Body
+            if (ExpectEndOfStatement(sectionStatement))
+                sectionStatement.Body = ParseBlockStatement(sectionStatement);
+            return Close(sectionStatement);
+        }
+
+
+
+        private ScriptRenderStatement ParseRenderStatement()
+        {
+            var renderStatement = Open<ScriptRenderStatement>();
+            bool hasAnonymous;
+            var expression = TransformKeyword(ExpectAndParseExpressionAndAnonymous(renderStatement, out hasAnonymous)) as ScriptFunctionCall;
+            if (expression == null)
+                LogError(renderStatement, $"Expecting a section name in 'render'.", true);
+            else
+                renderStatement.Arguments.AddRange(expression.Arguments);
+            return Close(renderStatement);
+        }
+
+
+
         private ScriptBlockStatement ParseBlockStatement(ScriptStatement parentStatement)
         {
-            Debug.Assert(!(parentStatement is ScriptBlockStatement));
+            //Debug.Assert(!(parentStatement is ScriptBlockStatement)); AJW: Section is a BlockStmt
 
             Blocks.Push(parentStatement);
 

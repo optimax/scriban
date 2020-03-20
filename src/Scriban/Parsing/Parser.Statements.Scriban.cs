@@ -178,8 +178,6 @@ namespace Scriban.Parsing
                     break;
 
 
-
-
                 
                 case "layout":
                     CheckNotInCase(parent, startToken);
@@ -191,6 +189,16 @@ namespace Scriban.Parsing
                     statement = ParseBodyStatement();
                     NextToken();
                     ExpectEndOfStatement(statement);
+                    break;
+
+
+                case "section":
+                    CheckNotInCase(parent, startToken);
+                    statement = ParseSectionStatement();
+                    break;
+                case "render":
+                    CheckNotInCase(parent, startToken);
+                    statement = ParseRenderStatement();
                     break;
 
 
@@ -358,8 +366,11 @@ namespace Scriban.Parsing
                 case "ret":
                 case "wrap":
                 case "do":
+                //
                 case "layout":
                 case "body":
+                case "section":
+                case "render":
                     return true;
             }
             return false;

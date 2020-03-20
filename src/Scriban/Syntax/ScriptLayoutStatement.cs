@@ -6,7 +6,7 @@ using Scriban.Runtime;
 
 namespace Scriban.Syntax
 {
-    [ScriptSyntax("layout directive expression", "<target_expression> <argument[0]> ... <argument[n]>")]
+    [ScriptSyntax("'layout' directive", "layout <layout-template-name>")]
     public class ScriptLayoutStatement : ScriptStatement
     {
         public List<ScriptExpression> Arguments { get; private set; }
@@ -16,10 +16,14 @@ namespace Scriban.Syntax
             Arguments = new List<ScriptExpression>();
         }
 
+
         public override object Evaluate(TemplateContext context)
         {
-            throw new Exception("Internal scripting error: 'layout' statement should never be evaluated.");
+            var templateName = context.ToString(this.Span, Arguments[0]);
+
+            throw new ScriptRuntimeException(this.Span, $"There can only be one 'layout' statement in a file, found 'layout \"{templateName}\"'");
         }
+
 
         public override void Write(TemplateRewriterContext context)
         {

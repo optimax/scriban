@@ -14,10 +14,7 @@ namespace Scriban.Functions
     /// </summary>
     public sealed class IncludeFunction : IScriptCustomFunction
     {
-        public IncludeFunction()
-        {
-        }
-
+      
         public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
         {
             if (arguments.Count == 0)

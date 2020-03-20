@@ -1,6 +1,12 @@
 // Copyright (c) Alexandre Mutel. All rights reserved.
 // Licensed under the BSD-Clause 2 license. 
 // See license.txt file in the project root for full license information.
+using Scriban.Functions;
+using Scriban.Helpers;
+using Scriban.Parsing;
+using Scriban.Runtime;
+using Scriban.Runtime.Accessors;
+using Scriban.Syntax;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,13 +14,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using Scriban.Functions;
-using Scriban.Helpers;
-using Scriban.Parsing;
-using Scriban.Runtime;
-using Scriban.Runtime.Accessors;
-using Scriban.Syntax;
 
 namespace Scriban
 {
@@ -36,6 +35,7 @@ namespace Scriban
         private IScriptOutput _output;
         private FastStack<string> _sourceFiles;
         private FastStack<object> _caseValues;
+        private FastStack<ScriptPage> _pages;
         private int _callDepth;
         private bool _isFunctionCallDisabled;
         private int _loopStep;
@@ -111,6 +111,7 @@ namespace Scriban
             _availableTags = new FastStack<Dictionary<object, object>>(4);
 
             _sourceFiles = new FastStack<string>(4);
+            _pages = new FastStack<ScriptPage>(4);
 
             _memberAccessors = new Dictionary<Type, IObjectAccessor>();
             _listAccessors = new Dictionary<Type, IListAccessor>();
@@ -202,6 +203,12 @@ namespace Scriban
         /// Gets the current source file.
         /// </summary>
         public string CurrentSourceFile => _sourceFiles.Peek();
+
+
+        /// <summary>
+        /// Gets the current Page.
+        /// </summary>
+        public ScriptPage CurrentPage => _pages.Peek();
 
         /// <summary>
         /// Gets or sets a callback function that is called when a variable is being resolved and was not found from any scopes.
@@ -334,6 +341,35 @@ namespace Scriban
             }
             return _sourceFiles.Pop();
         }
+
+
+
+        /// <summary>
+        /// Pushes the current Page being executed. This should have enough information so that layouts and sections can work correctly.
+        /// </summary>
+        /// <param name="sourceFile">The Page.</param>
+        public void PushPage(ScriptPage page)
+        {
+            if (page == null) throw new ArgumentNullException(nameof(page));
+            _pages.Push(page);
+        }
+
+
+        /// <summary>
+        /// Pops the page being executed.
+        /// </summary>
+        /// <returns>The Pagee that was executed</returns>
+        /// <exception cref="System.InvalidOperationException">Cannot PopSourceFile more than PushSourceFile</exception>
+        public ScriptPage PopPage()
+        {
+            if (_pages.Count == 0)
+            {
+                throw new InvalidOperationException("Cannot PopPage more than PushPage");
+            }
+            return _pages.Pop();
+        }
+
+
 
         /// <summary>
         /// Gets the value from the specified expression using the current <see cref="ScriptObject"/> bound to the model context.
