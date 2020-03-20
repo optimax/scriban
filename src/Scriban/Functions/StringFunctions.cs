@@ -62,6 +62,7 @@ namespace Scriban.Functions
             return builder.ToString();
         }
 
+
         /// <summary>
         /// Converts the first character of each word in the passed string to a upper case character.
         /// </summary>
@@ -140,8 +141,18 @@ namespace Scriban.Functions
         /// </remarks>
         public static string Downcase(string text)
         {
+            if (string.IsNullOrEmpty(text))
+                return text ?? string.Empty;
+
             return text?.ToLowerInvariant();
         }
+
+
+        public static string Lowercase(string text)
+        {
+            return Downcase(text);
+        }
+
 
         /// <summary>
         /// Returns a boolean indicating whether the input string ends with the specified string `value`.
@@ -787,8 +798,19 @@ namespace Scriban.Functions
         /// </remarks>
         public static string Upcase(string text)
         {
+            if (string.IsNullOrEmpty(text))
+                return text ?? string.Empty;
+
             return text?.ToUpperInvariant();
         }
+
+
+        public static string Uppercase(string text)
+        {
+            return Upcase(text);
+        }
+
+
 
 #if !PCL328 && !NETSTD11
         /// <summary>
