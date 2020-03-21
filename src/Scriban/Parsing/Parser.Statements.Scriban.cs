@@ -201,6 +201,11 @@ namespace Scriban.Parsing
                     statement = ParseRenderStatement();
                     break;
 
+                case "markdown":
+                    CheckNotInCase(parent, startToken);
+                    statement = ParseMarkdownStatement();
+                    break;
+
 
                 default:
                     CheckNotInCase(parent, startToken);
@@ -371,6 +376,7 @@ namespace Scriban.Parsing
                 case "body":
                 case "section":
                 case "render":
+                case "markdown":
                     return true;
             }
             return false;

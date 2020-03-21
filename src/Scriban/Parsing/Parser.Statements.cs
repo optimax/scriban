@@ -62,6 +62,26 @@ namespace Scriban.Parsing
 
 
 
+        private ScriptMarkdownStatement ParseMarkdownStatement()
+        {
+            var markdownStatement = Open<ScriptMarkdownStatement>();
+            // Either arguments...
+            var expression = TransformKeyword(ExpectAndParseExpressionAndAnonymous(markdownStatement, out var hasAnonymous)) as ScriptFunctionCall;
+            if (expression != null)
+            {
+                markdownStatement.Arguments.AddRange(expression.Arguments);
+                return Close(markdownStatement);
+            }
+            // ...Or body
+            if (ExpectEndOfStatement(markdownStatement))
+                markdownStatement.Body = ParseBlockStatement(markdownStatement);
+            return Close(markdownStatement);
+        }
+
+
+
+
+
         private ScriptBlockStatement ParseBlockStatement(ScriptStatement parentStatement)
         {
             //Debug.Assert(!(parentStatement is ScriptBlockStatement)); AJW: Section is a BlockStmt

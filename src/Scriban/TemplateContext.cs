@@ -145,6 +145,11 @@ namespace Scriban
         public ITemplateLoader TemplateLoader { get; set; }
 
         /// <summary>
+        /// Gets or sets the markdown <see cref="IStringTransformer"/> used by the markdown statement/function. Must be set in order for the markdown statemen and/or function to work.
+        /// </summary>
+        public IStringTransformer Markdown { get; set; }
+
+        /// <summary>
         /// The <see cref="ParserOptions"/> used by the <see cref="TemplateLoader"/> via the include directive.
         /// </summary>
         public ParserOptions TemplateLoaderParserOptions { get; set; }
