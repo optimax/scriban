@@ -21,7 +21,7 @@ namespace Scriban.Syntax
 
         public override object Evaluate(TemplateContext context)
         {
-            return $"SECTION {Name}";
+            throw new ScriptRuntimeException(this.Span, $"Section cannot be defined in a layout");
         }
 
         public override void Write(TemplateRewriterContext context)

@@ -20,7 +20,6 @@ namespace Scriban.Syntax
         public override object Evaluate(TemplateContext context)
         {
             var templateName = context.ToString(this.Span, Arguments[0]);
-
             throw new ScriptRuntimeException(this.Span, $"There can only be one 'layout' statement in a file, found 'layout \"{templateName}\"'");
         }
 

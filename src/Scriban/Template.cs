@@ -275,7 +275,8 @@ namespace Scriban
 
         private void CheckErrors()
         {
-            if (HasErrors) throw new InvalidOperationException("This template has errors. Check the <Template.HasError> and <Template.Messages> before evaluating a template. Messages:\n" + StringHelper.Join("\n", Messages));
+            if (HasErrors)
+                throw new InvalidOperationException("This template has errors. Check the <Template.HasError> and <Template.Messages> before evaluating a template. Messages:\n" + StringHelper.Join("\n", Messages));
         }
 
 

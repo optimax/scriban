@@ -1,5 +1,3 @@
-// AJW
-
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,14 +18,14 @@ namespace Scriban.Syntax
 
         public override object Evaluate(TemplateContext context)
         {
-            
             if (context.CurrentPage.Sections.ContainsKey(Name))
             {
                 var section = context.CurrentPage.Sections[Name];
                 var renderedSection = section.Body.Evaluate(context);
                 return renderedSection;
             }
-            return ""; 
+
+            return "";
         }
 
 
