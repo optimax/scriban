@@ -146,7 +146,7 @@ This software is released under the [BSD-Clause 2 license](http://opensource.org
 
 ## Credits
 
-Original Scriban logo is an adapted `Puzzle` by [Andrew Doane](https://thenounproject.com/andydoane/) from the Noun Project. 
+The Scriptic logo, clearly inspired by Scriban's *Puzzle*, is nevertheless original work by Andrew J. Wozniewicz (source CorelDraw file included). 
 
 ## Authors
 
