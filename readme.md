@@ -127,6 +127,8 @@ The transformer can do an arbitrary series of transformations on the text, but i
 
 Scriban has been available for a while as a NuGet package: [![NuGet](https://img.shields.io/nuget/v/Scriban.svg)](https://www.nuget.org/packages/Scriban/). Scriptic is not available on NuGet yet.
 
+Scriptic is still very much work-in-progress. It hasn't achieved the same level of stability and maturity as Scriban. That said, Scriptic is just a minor extension of Scriban, so it enjoys a lot of the benefits of its mature code base. We may have inadvertently broken something, though... Anyway, we use Scriptic for production work. YMMV. Use at your own risk. 
+
 ## Benchmarks
 
 **Scriptic/Scriban is blazing fast**! For more details, you can check the [benchmarks document](doc/benchmarks.md).
@@ -146,8 +148,6 @@ This software is released under the [BSD-Clause 2 license](http://opensource.org
 
 Original Scriban logo is an adapted `Puzzle` by [Andrew Doane](https://thenounproject.com/andydoane/) from the Noun Project. 
 
-Scriptic is still work-in-progress. It hasn't achieved the same level of stability and maturity as Scriban.
-
 ## Authors
 
-Scriban was created and is being maintained by Alexandre Mutel aka [xoofx](http://xoofx.com). Scriptic was forked from Scriban and extended by Andrew J. Wozniewicz.
+Scriban was created and is being maintained by Alexandre Mutel aka [xoofx](http://xoofx.com). Scriptic was forked from Scriban and extended by Andrew J. Wozniewicz (a.k.a. Ancz).
