@@ -1,6 +1,18 @@
-# scriban [![Build status](https://ci.appveyor.com/api/projects/status/ig5kv8r63bqjsd9a?svg=true)](https://ci.appveyor.com/project/xoofx/scriban)   [![NuGet](https://img.shields.io/nuget/v/Scriban.svg)](https://www.nuget.org/packages/Scriban/)
+# Scriptic	
 
 <img align="right" width="160px" height="160px" src="img/scriban.png">
+
+Scriptic is a fast, powerful, safe and lightweight text templating language and engine for .NET, with a compatibility mode for parsing `liquid` templates.
+
+Scriptic is a direct fork of, and extension to, [Scriban](https://github.com/lunet-io/scriban) and thus inherits all of its awesome features, **adding support for layouts and sections (similar to .NET Razor's).**
+
+The following applies equally to Scriptic and Scriban:
+
+```C#
+// Parse a scriban template
+var template = Template.Parse("Hello {{name}}!");
+var result = template.Render(new { Name = "World" }); // => "Hello World!" 
+```
 
 Scriban is a fast, powerful, safe and lightweight text templating language and engine for .NET, with a compatibility mode for parsing `liquid` templates.
 
@@ -40,7 +52,7 @@ var result = template.Render(new { Products = this.ProductList });
 > By default, Properties and methods of .NET objects are automatically exposed with lowercase and `_` names. It means that a property like `MyMethodIsNice` will be exposed as `my_method_is_nice`. This is the default convention, originally to match the behavior of liquid templates.
 > If you want to change this behavior, you need to use a [`MemberRenamer`](doc/runtime.md#member-renamer) delegate
 
-## Features
+## Scriptic/Scriban Features
 
 - Very **efficient**, **fast** parser and a **lightweight** runtime. CPU and Garbage Collector friendly. Check the [benchmarks](doc/benchmarks.md) for more details.
 - Powered by a Lexer/Parser providing a **full Abstract Syntax Tree, fast, versatile and robust**, more efficient than regex based parsers.
@@ -74,31 +86,50 @@ var result = template.Render(new { Products = this.ProductList });
 
 You can install the [Scriban Extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=xoofx.scriban) to get syntax coloring for scriban scripts (without HTML) and scriban html files.
 
+## Scriptic Extensions
+
+Scriptic adds a few additional keywords to the scripting language:
+
+- `layout` - for example, the directive `{{layout "_main_layout.htmls"}}` indicates the layout file for the current page. Layouts can be nested, i.e. a layout file can itself have a `layout` directive. There can only be one `layout` directive in a given file, though. The whole layout concept is modeled after .NET Razor views.
+- `body` - a placeholder inside a layout file that indicates where the page content is going to be rendered. 
+- `section` - for example `{{section "main-menu}"}}` in a page is a named, reusable snippet of HTML and Scriptic. The content of a section is rendered wherever a corresponding `render` directive is placed. 
+- `render` - for example `{{render "main-menu"}}` indicates where a given named section is to be rendered within a layout file. Sections can also be defined and rendered within the same page. The same section can be rendered multiple times, making it a convenient way to isolate small, reusable snippets of markup.
+- `markdown` - can be used in two different ways: 
+  - as a statement `{{markdown}} <markdown text goes here> {{end}}`,  in which case the text inside the `markdown-end` pair is treated as pure markdown (it must not contain Scriptic expressions) 
+  - or as a special (pseudo-)function, `{{markdown "mdfilename.md"}}`, in which case the specified external markdown file is pulled in; the markdown file can also contain Scriptic statements and expressions. They are evaluated before the markdown syntax is processed.
+
+The `markdown` keyword works only when you provide a markdown text renderer. This is done in a similar way to how the external template loaders are specified:
+
+```c#
+context.Markdown = new MarkdownRenderer();
+```
+
+where `MarkdownRenderer` implements the `IStringTransformer` interface:
+
+```C#
+public interface IStringTransformer
+{
+    string Render(string text);
+}
+```
+
+The transformer can do an arbitrary series of transformations on the text, but it was intended to work well with a markdown processor like [`Markdig`](https://github.com/lunet-io/markdig) (interestingly, from the same author as Scriban).
+
 ## Documentation
 
-* See the [Language](doc/language.md) document for a description of the language syntax.
-* See the [Built-in functions](doc/builtins.md) document for the list of the built-in functions.
+* See the [Language](doc/language.md) document for a description of the Scriban language syntax.
+* See the [Built-in functions](doc/builtins.md) document for the list of the Scriban built-in functions.
 * See the [Runtime](doc/runtime.md) document for a description of the .NET runtime API to compile and run templates.
 * See the [Liquid support](doc/liquid-support.md) document for more details about the support of liquid templates.
-* See my blog post "[Implementing a Text Templating Engine for .NET](http://xoofx.com/blog/2017/11/13/implementing-a-text-templating-language-and-engine-for-dotnet/)" for some behind the scene details.
+* See the blog post "[Implementing a Text Templating Engine for .NET](http://xoofx.com/blog/2017/11/13/implementing-a-text-templating-language-and-engine-for-dotnet/)" by SCriban's author for some behind the scene details.
 
 ## Binaries
 
-Scriban is available as a NuGet package: [![NuGet](https://img.shields.io/nuget/v/Scriban.svg)](https://www.nuget.org/packages/Scriban/)
-
-Compatible with the following .NET framework profiles:
-
-- `.NET3.5`
-- `.NET4.0+`
--  .NET PCL profile `portable40-net40+sl5+win8+wp8+wpa81`
-- `UAP10.0+`
-- `NetStandard1.1+` and `NetStandard1.3+` running on `CoreCLR`
-
-Also [Scriban.Signed](https://www.nuget.org/packages/Scriban.Signed/) NuGet package provides signed assemblies.
+Scriban has been available for a while as a NuGet package: [![NuGet](https://img.shields.io/nuget/v/Scriban.svg)](https://www.nuget.org/packages/Scriban/). Scriptic is not available on NuGet yet.
 
 ## Benchmarks
 
-**Scriban is blazing fast**! For more details, you can check the [benchmarks document](doc/benchmarks.md).
+**Scriptic/Scriban is blazing fast**! For more details, you can check the [benchmarks document](doc/benchmarks.md).
 
 ## License
 
@@ -113,8 +144,10 @@ This software is released under the [BSD-Clause 2 license](http://opensource.org
 
 ## Credits
 
-Adapted logo `Puzzle` by [Andrew Doane](https://thenounproject.com/andydoane/) from the Noun Project
+Original Scriban logo is an adapted `Puzzle` by [Andrew Doane](https://thenounproject.com/andydoane/) from the Noun Project. 
 
-## Author
+Scriptic is still work-in-progress. It hasn't achieved the same level of stability and maturity as Scriban.
 
-Alexandre Mutel aka [xoofx](http://xoofx.com).
+## Authors
+
+Scriban was created and is being maintained by Alexandre Mutel aka [xoofx](http://xoofx.com). Scriptic was forked from Scriban and extended by Andrew J. Wozniewicz.
