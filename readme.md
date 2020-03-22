@@ -1,10 +1,10 @@
 # Scriptic	
 
-<img align="right" width="160px" height="160px" src="img/scriban.png">
+<img align="right" width="160px" height="160px" src="img/scriptic.png">
 
 Scriptic is a fast, powerful, safe and lightweight text templating language and engine for .NET, with a compatibility mode for parsing `liquid` templates.
 
-Scriptic is a direct fork of, and extension to, [Scriban](https://github.com/lunet-io/scriban) and thus inherits all of its awesome features, **adding support for layouts and sections (similar to .NET Razor's).**
+Scriptic is a direct fork of, and extension to, [Scriban](https://github.com/lunet-io/scriban) and thus inherits all of its awesome features, **adding support for layouts and sections (similar to .NET Razor's)** (see below).
 
 The following applies equally to Scriptic and Scriban:
 
