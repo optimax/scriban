@@ -3,6 +3,7 @@
 // See license.txt file in the project root for full license information.
 
 using System.Collections.Generic;
+using System.Text;
 
 namespace Scriban.Syntax
 {
@@ -18,6 +19,12 @@ namespace Scriban.Syntax
 
         public override object Evaluate(TemplateContext context)
         {
+            StringBuilder sb = null;
+            if (!context.EnableOutput)
+            {
+                sb = new StringBuilder();
+            }
+
             object result = null;
             for (int i = 0; i < Statements.Count; i++)
             {
@@ -33,9 +40,12 @@ namespace Scriban.Syntax
                 {
                     result = null;
                 }
-                else if (result != null && context.FlowState != ScriptFlowState.Return && context.EnableOutput)
+                else if (result != null && context.FlowState != ScriptFlowState.Return)
                 {
-                    context.Write(Span, result);
+                    if (context.EnableOutput)
+                        context.Write(Span, result);
+                    else
+                        sb?.Append(result);
                     result = null;
                 }
 
@@ -45,6 +55,9 @@ namespace Scriban.Syntax
                     break;
                 }
             }
+
+            if (!context.EnableOutput)
+                return sb.ToString();
             return result;
         }
 

@@ -31,6 +31,7 @@ namespace Scriban.Functions
                 SetValue(DateTimeFunctions.DateVariable.Name, new DateTimeFunctions(), true);
                 SetValue("html", new HtmlFunctions(), true);
                 SetValue("math", new MathFunctions(), true);
+                SetValue("markdown", new MarkdownFunction(), true);
                 SetValue("object", new ObjectFunctions(), true);
                 SetValue("regex", new RegexFunctions(), true);
                 SetValue("string", new StringFunctions(), true);

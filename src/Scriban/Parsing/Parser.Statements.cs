@@ -13,8 +13,7 @@ namespace Scriban.Parsing
         private ScriptLayoutStatement ParseLayoutStatement()
         {
             var layoutStatement = Open<ScriptLayoutStatement>();
-            bool hasAnonymous;
-            var expression = TransformKeyword(ExpectAndParseExpressionAndAnonymous(layoutStatement, out hasAnonymous)) as ScriptFunctionCall;
+            var expression = TransformKeyword(ExpectAndParseExpressionAndAnonymous(layoutStatement, out var hasAnonymous)) as ScriptFunctionCall;
             if (expression == null)
                 LogError(layoutStatement, $"Expecting a layout file name.", true);
             else
@@ -65,13 +64,15 @@ namespace Scriban.Parsing
         private ScriptMarkdownStatement ParseMarkdownStatement()
         {
             var markdownStatement = Open<ScriptMarkdownStatement>();
-            // Either arguments...
+            // Either an expression...
             var expression = TransformKeyword(ExpectAndParseExpressionAndAnonymous(markdownStatement, out var hasAnonymous)) as ScriptFunctionCall;
             if (expression != null)
             {
-                markdownStatement.Arguments.AddRange(expression.Arguments);
+                markdownStatement.Expression = expression;
                 return Close(markdownStatement);
             }
+
+
             // ...Or body
             if (ExpectEndOfStatement(markdownStatement))
                 markdownStatement.Body = ParseBlockStatement(markdownStatement);

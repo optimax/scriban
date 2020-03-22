@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -8,18 +9,18 @@ namespace Scriban.Syntax
     [ScriptSyntax("'markdown' statement", "markdown ... end")]
     public class ScriptMarkdownStatement : ScriptBlockStatement
     {
-        public List<ScriptExpression> Arguments { get; private set; }
+        public ScriptExpression Expression { get; set; }
 
         public ScriptBlockStatement Body { get; set; }
 
         public ScriptMarkdownStatement()
         {
-            Arguments = new List<ScriptExpression>();
+            
         }
 
         public override object Evaluate(TemplateContext context)
         {
-            if (Arguments.Any())
+            if (Expression != null)
                 return EvaluateMarkdownFunction(context);
             Debug.Assert(Body != null);
             return EvaluateMarkdownBlock(context);
@@ -28,8 +29,10 @@ namespace Scriban.Syntax
 
         public object EvaluateMarkdownFunction(TemplateContext context)
         {
-            return "markdown()"; //TODO
+            var html = (string)Expression.Evaluate(context);
+            return html; 
         }
+
 
 
         public object EvaluateMarkdownBlock(TemplateContext context)

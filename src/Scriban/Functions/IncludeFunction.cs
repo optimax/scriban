@@ -12,10 +12,10 @@ namespace Scriban.Functions
     /// <summary>
     /// The include function available through the function 'include' in scriban.
     /// </summary>
-    public sealed class IncludeFunction : IScriptCustomFunction
+    public class IncludeFunction : IScriptCustomFunction
     {
       
-        public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
+        public virtual object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments, ScriptBlockStatement blockStatement)
         {
             if (arguments.Count == 0)
             {
