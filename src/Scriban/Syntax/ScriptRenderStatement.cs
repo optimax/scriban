@@ -37,7 +37,7 @@ namespace Scriban.Syntax
         public override string ToString()
         {
             var name = Arguments.Count > 0 ? Arguments[0].ToString() : "???";
-            return $"{{render \"{name}\"}}";
+            return $"render \"{name}\"";
         }
     }
 }

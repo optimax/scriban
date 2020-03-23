@@ -17,7 +17,7 @@ namespace Scriban.Syntax
 
         public override string ToString()
         {
-            return "{BODY}";
+            return "body";
         }
     }
 }

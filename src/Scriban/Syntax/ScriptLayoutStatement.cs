@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Scriban.Runtime;
 
 namespace Scriban.Syntax
@@ -16,6 +17,8 @@ namespace Scriban.Syntax
             Arguments = new List<ScriptExpression>();
         }
 
+
+        public string Name => Arguments.Any() ? Arguments[0].ToString() : "";
 
         public override object Evaluate(TemplateContext context)
         {
@@ -134,5 +137,12 @@ namespace Scriban.Syntax
 
             return result;
         }
+
+        public override string ToString()
+        {
+            return $"layout '{Name}'";
+        }
     }
+
+
 }

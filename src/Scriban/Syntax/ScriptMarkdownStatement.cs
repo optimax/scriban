@@ -54,7 +54,7 @@ namespace Scriban.Syntax
 
         public override string ToString()
         {
-            return $"{{markdown-statement}}";
+            return $"markdown-statement";
         }
     }
 
