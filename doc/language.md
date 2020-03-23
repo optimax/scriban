@@ -170,7 +170,7 @@ Scriban provides **two modes** for controlling whitespace:
     ```scriban-html
     This is a <       
     {{- name}}> text
-    ``` 
+    ```
     > **output**
     ```html
     This is a <foo> a text
@@ -181,7 +181,7 @@ Scriban provides **two modes** for controlling whitespace:
     ```scriban-html
     This is a <{{ name -}} 
     > text:       
-    ``` 
+    ```
     > **output**
     ```html
     This is a <foo> text
@@ -275,12 +275,12 @@ Scriban supports two types of strings:
   > **input**
   ```scriban-html
   {{ "this is a text" | regex.split `\s+` }}
-  ``` 
+  ```
   
   > **output**
   ```html 
   [this, is, a, test]
-  ``` 
+  ```
 
 [:top:](#language)
 ### 3.2 Numbers
@@ -440,11 +440,11 @@ If the object is a "pure" scriban objects (created with a `{...}` or  instantiat
   myobject.member3 = "may be" 
   myobject.member3
 }}
-``` 
+```
 > **output**
 ```html
 may be
-``` 
+```
 
 > **NOTICE**
 >
@@ -507,7 +507,7 @@ If the array is a "pure" scriban array (created with a `[...]` or  instantiated 
   myarray[2] = 3 
   myarray[3] = 4 
 }}
-``` 
+```
 
 You can also manipulate arrays with the [`array` builtin object](#array-builtin).
 
@@ -571,7 +571,7 @@ The following declares a function `sub` that uses its first argument and subtrac
 {{func sub
    ret $0 - $1
 end}}
-``` 
+```
 
 All argument are passed to the special variable `$` that will contain the list of direct arguments
 and named arguments:
@@ -602,7 +602,7 @@ Note that a function can have mixed text statements as well:
 {{func inc}}
    This is a text with the following argument {{ $0 + 1 }}
 {{end}}
-``` 
+```
 
 Because functions are object, they can be stored into a property of an object by using the alias `@` operator:
 
@@ -634,6 +634,7 @@ A variable path expression contains the path to a variable:
 Note that a variable path can either point to a simple variable or can result into calling a parameter less function. 
 
 [:top:](#language)
+
 ### 8.2 Assign expression
 
 A value can be assigned to a top level variable or to the member of an object/array:
@@ -645,14 +646,15 @@ A value can be assigned to a top level variable or to the member of an object/ar
 An assign expression must be a top level expression statement and cannot be used within a sub-expression.
 
 [:top:](#language)
+
 ### 8.3 Nested expression
 
 An expression enclosed by `(` and `)` 
 
 `{{ name = ('foo' + 'bar') }}`
 
-
 [:top:](#language)
+
 ### 8.4 Arithmetic expressions
 
 #### On numbers
@@ -706,7 +708,7 @@ A conditional expression produces a boolean by comparing a left and right value.
 
 They work with both `numbers`, `strings` and datetimes.
 
-You can combine conditionnal expressions with `&&` (and operator) and `||` (or operator)
+You can combine conditional expressions with `&&` (and operator) and `||` (or operator)
 
 |Operator            | Description
 |--------------------|------------
@@ -858,7 +860,7 @@ The following values are used for converting literals to boolean:
 - `"foo" -> true` 
 
 Example testing a page object:
- 
+
 `{{ if !page }}Page is not null{{ else }}Page is null!{{ end }}` 
 
 
@@ -963,6 +965,7 @@ Allows to reverse the iteration on the elements
 ```
 
 [:top:](#language)
+
 #### `while <expression> ... end`
 
 ```
@@ -1121,7 +1124,7 @@ The `import <variable_path>` statement allows to import the members of an object
   import myobject
   member1  # will print the "yes" string to the output
 }}
-``` 
+```
 
 Note that `readonly` variables won't be override. 
 
@@ -1172,7 +1175,7 @@ Note that variables declared outside the `with` block are accessible within.
 ### 9.9 `include <name> arg1?...argn?` 
 
 The include is not a statement but actually a function that allows to parse and render the specified template name. In order to use this function, a delegate to an template loader must be setup on the [`TemplateOptions.TemplateLoader`](runtime.md#include-and-itemplateloader) property passed to the `Template.Parse` method.
- 
+
 ```
 include 'myinclude.html'
 x = include 'myinclude.html'
@@ -1190,7 +1193,7 @@ will output:
 ```
 This is a string with the value 1
 This is a string with the value 2 modified
-```  
+```
 
 [:top:](#language)
 ### 9.10 `ret <expression>?`
@@ -1210,3 +1213,110 @@ This is a text
 ```
 
 [:top:](#language)
+
+## 10. Sriptic-Specific Additions
+
+Scriptic adds a few keywords and corresponding capabilities on top of the Scriban language.
+
+[:top:](#language)
+
+### 10.1. Layout/Body Statements
+
+A layout can be specified once for a top-level page. The layout mechanism was inspired by .NET Razor templating engine and works in a similar way.
+
+The layout for a page is specified by the `layout` statement that indicates the file name of the layout to use:
+
+> **syntax**
+
+```
+{{layout <layout-file-name>}}
+```
+
+The `<layout-file-name>` can be a dynamic Scriptic expression, not just a string literal, as it is being computed at evaluation time.
+
+Let's say `my_page.html` contains:
+
+```Sc
+{{layout "top_layout.html" -}}
+
+<p>Content of the page follows</p>
+```
+
+The `top_layout.html` page can contain arbitrary text, and *should* contain at least one `{{body}}` statement:
+
+```
+<html>
+<head>
+   <title>Example of Using Layout</title>
+</head>
+<body>
+   {{body}}
+</body>
+</html>
+```
+
+The layout `top_layout.html` will be applied to the page `my_page.html` resulting in the following output:
+
+> **output**
+
+```
+<html>
+<head>
+   <title>Example of Using Layout</title>
+</head>
+<body>
+<p>Content of the page follows</p>
+</body>
+</html>
+```
+
+The `{{body}}` statement inside the layout is replaced with the content of the page. If there is no `{{body}}` statement inside a layout page, no substitution will take place and the process of rendering the page will output just the layout content.
+
+> **NOTE**
+>
+> Each page/file used as a layout should contain at least one `{{body}}` statement.
+
+#### 10.1.1. Nesting Layouts
+
+Layouts can be nested. For example, changing the `my_page.html` content to:
+
+```
+{{layout "mid_layout.html" -}}
+
+<p>Content of the page follows</p>
+```
+
+and creating the `mid-layout.html` page with arbitrary content, for example as follows:
+
+```
+{{layout "top_layout.html"}}
+<div>
+   Page Banner Text
+</div>
+{{body}}
+```
+
+will result in the following output:
+
+> **output:**
+
+```
+<html>
+<head>
+   <title>Example of Using Layout</title>
+</head>
+<body>
+<div>
+   Page Banner Text
+</div>
+<p>Content of the page follows</p>
+</body>
+</html>
+```
+
+Layouts are thus applied recursively until the "top-level" layout is encountered - one that does not contain any `{{layout}}` statements.
+
+>  **NOTE**
+>
+> There can only be one `{{layout}}` statement in a file. Placing more than one `{{layout}}` statement in a page will result in a run-time error.
+
