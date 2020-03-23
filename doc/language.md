@@ -63,8 +63,8 @@ This document describes the syntax of the Scriptic/scriban templating language.
   - [9.9 <code>include &lt;name&gt; arg1?...argn?</code>](#99-include-name-arg1argn)
   - [9.10 <code>ret &lt;expression&gt;?</code>](#910-ret-expression)
 - [10 Built-in functions](builtins.md)
-- [11 ScripticSpecific Additions](#11-scriptic)
-  - [11.1 Layout/Body Statements](#111-layout-body)
+- [11 ScripticSpecific Additions](#11-scripticspecific-additions)
+  - [11.1 Layout/Body Statements](#111-layoutbody-statements)
     - [11.1.1 Nesting Layouts](#1111-nesting-layouts)
   - 11.2 Section/Render Statements TODO
   - 11.3 Markdown Statement TODO
