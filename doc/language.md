@@ -1,8 +1,9 @@
 # Language
 
-This document describes the syntax of the scriban templating language.
+This document describes the syntax of the Scriptic/scriban templating language.
 
 > NOTE: This document does not describe the `liquid` language. Check the [`liquid website`](https://shopify.github.io/liquid/) directly.
+> NOTE: This documentation describes the scriban templating language and the additions made for Scriptic.
 
 ## Table of Contents
 
@@ -62,6 +63,11 @@ This document describes the syntax of the scriban templating language.
   - [9.9 <code>include &lt;name&gt; arg1?...argn?</code>](#99-include-name-arg1argn)
   - [9.10 <code>ret &lt;expression&gt;?</code>](#910-ret-expression)
 - [10 Built-in functions](builtins.md)
+- [11 ScripticSpecific Additions](#11-scriptic)
+  - [11.1 Layout/Body Statements](#111-layout-body)
+    - [11.1.1 Nesting Layouts](#1111-nesting-layouts)
+  - 11.2 Section/Render Statements TODO
+  - 11.3 Markdown Statement TODO
 
 [:top:](#language)
 ## 1. Blocks
@@ -1214,13 +1220,13 @@ This is a text
 
 [:top:](#language)
 
-## 10. Sriptic-Specific Additions
+## 11. Sriptic-Specific Additions
 
 Scriptic adds a few keywords and corresponding capabilities on top of the Scriban language.
 
 [:top:](#language)
 
-### 10.1. Layout/Body Statements
+### 11.1. Layout/Body Statements
 
 A layout can be specified once for a top-level page. The layout mechanism was inspired by .NET Razor templating engine and works in a similar way.
 
@@ -1276,7 +1282,7 @@ The `{{body}}` statement inside the layout is replaced with the content of the p
 >
 > Each page/file used as a layout should contain at least one `{{body}}` statement.
 
-#### 10.1.1. Nesting Layouts
+#### 11.1.1. Nesting Layouts
 
 Layouts can be nested. For example, changing the `my_page.html` content to:
 
