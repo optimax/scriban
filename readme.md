@@ -4,7 +4,7 @@
 
 Scriptic is a fast, powerful, safe and lightweight text templating language and engine for .NET, with a compatibility mode for parsing `liquid` templates.
 
-Scriptic is a direct fork of, and extension to, [Scriban](https://github.com/lunet-io/scriban) and thus inherits all of its awesome features, **adding support for layouts and sections (similar to .NET Razor's)** (see below).
+Scriptic is a direct fork of, and extension to, [Scriban](https://github.com/lunet-io/scriban) and thus inherits all of its awesome features, **while adding support for layouts and sections (similar to .NET Razor's)** (see below).
 
 The following applies equally to Scriptic and Scriban:
 
@@ -84,9 +84,9 @@ var result = template.Render(new { Products = this.ProductList });
 
 ## Syntax Coloring
 
-You can install the [Scriban Extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=xoofx.scriban) to get syntax coloring for scriban scripts (without HTML) and scriban html files.
+You can install the [Scriban Extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=xoofx.scriban) to get syntax coloring for scriban scripts (without HTML) and scriban html files. Note that the extension does not recognize Scriptic features on top of Scriban.
 
-## Scriptic Extensions
+## Scriptic-Specific Extensions
 
 Scriptic adds a few additional keywords to the scripting language:
 
