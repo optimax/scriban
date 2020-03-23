@@ -70,6 +70,7 @@ This document describes the syntax of the Scriptic/scriban templating language.
   - 11.3 Markdown Statement TODO
 
 [:top:](#language)
+
 ## 1. Blocks
 
 There are 3 types of block of text in a template:
@@ -1220,7 +1221,7 @@ This is a text
 
 [:top:](#language)
 
-## 11. Sriptic-Specific Additions
+## 11. Scriptic-Specific Additions
 
 Scriptic adds a few keywords and corresponding capabilities on top of the Scriban language.
 
